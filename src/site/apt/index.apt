@@ -1,0 +1,16 @@
+Schemagen plugin for Maven
+
+    Ian Dickinson, i.j.dickinson@gmail.com\
+    2010-03-28
+
+    This plugin allows Java source files containing the concepts from
+an ontology as Java constants to be generated directly from the
+RDF source file. The Jena tool
+{{{http://jena.sourceforge.net/how-to/schemagen.html}schemagen}} exists to do this job;
+this project is simply a wrapper to allow Jena's schemagen to be
+run as a Maven plugin.
+
+* Basic principles
+
+    The plugin is controlled through parameters in the <<<configuration>>> section
+    of the project <<<pom.xml>>>.
