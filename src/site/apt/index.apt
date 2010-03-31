@@ -13,4 +13,7 @@ run as a Maven plugin.
 * Basic principles
 
     The plugin is controlled through parameters in the <<<configuration>>> section
-    of the project <<<pom.xml>>>.
+    of the project <<<pom.xml>>>. The files to include are specified by an
+    <<<includes>>> element, which defaults to <<<src/main/vocabs/*>>>. Files may
+    be excluded from processing by a pattern specified in an <<<excludes>>> element.
+
