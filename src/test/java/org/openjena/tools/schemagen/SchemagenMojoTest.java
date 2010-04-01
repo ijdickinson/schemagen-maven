@@ -1,4 +1,19 @@
+/*****************************************************************************
+ * File:    SchemagenMojoTest.java
+ * Project: schemagen
+ * Created: 22 Mar 2010
+ * By:      ian
+ *
+ * Copyright (c) 2010 Epimorphics Ltd. All rights reserved.
+ *****************************************************************************/
+
+// Package
+///////////////
+
 package org.openjena.tools.schemagen;
+
+// Imports
+///////////////
 
 import static org.junit.Assert.*;
 
@@ -8,6 +23,11 @@ import java.util.List;
 import org.junit.Test;
 import org.openjena.tools.schemagen.SchemagenMojo;
 
+/**
+ * <p>Unit tests for {@link SchemagenMojo}</p>
+ *
+ * @author ian
+ */
 public class SchemagenMojoTest {
 
     @Test
