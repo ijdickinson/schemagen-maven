@@ -126,30 +126,30 @@ public class SchemagenMojo
 
     /**
      * Append the given string to the array of included file patterns
-     * @param includes File pattern string to append to <code>this.includes</code>
+     * @param incl File pattern string to append to <code>this.includes</code>
      */
-    public void addIncludes( String includes ) {
-        String[] incl = new String[this.includes.length + 1];
+    public void addIncludes( String incl ) {
+        String[] incls = new String[this.includes.length + 1];
         int i = 0;
         for (String s: this.includes) {
-            incl[i++] = s;
+            incls[i++] = s;
         }
-        incl[i] = includes;
-        this.includes = incl;
+        incls[i] = incl;
+        this.includes = incls;
     }
 
     /**
      * Append the given string to the array of excluded file patterns
-     * @param excludes File pattern string to append to <code>this.excludes</code>
+     * @param excl File pattern string to append to <code>this.excludes</code>
      */
-    public void addExcludes( String excludes ) {
-        String[] excl = new String[this.excludes.length + 1];
+    public void addExcludes( String excl ) {
+        String[] excls = new String[this.excludes.length + 1];
         int i = 0;
         for (String s: this.excludes) {
-            excl[i++] = s;
+            excls[i++] = s;
         }
-        excl[i] = excludes;
-        this.excludes = excl;
+        excls[i] = excl;
+        this.excludes = excls;
     }
 
     /**
