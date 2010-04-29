@@ -24,6 +24,7 @@ package org.openjena.tools.schemagen;
  * @author Ian Dickinson, Epimorphics (mailto:ian@epimorphics.com)
  */
 public class Source
+    extends SchemagenOptions
 {
     /***********************************/
     /* Constants                       */
@@ -38,9 +39,6 @@ public class Source
     /* Instance variables              */
     /***********************************/
 
-    /** @parameter expr="fileName" */
-    private String fileName;
-
     /***********************************/
     /* Constructors                    */
     /***********************************/
@@ -50,7 +48,22 @@ public class Source
     /***********************************/
 
     public String getFileName() {
-        return fileName;
+        return getOption( OPT.INPUT );
+    }
+
+    /** @parameter expr="fileName" */
+    public void setFileName( String fileName ) {
+        setOption( OPT.INPUT, fileName );
+    }
+
+    /**
+     * Return true if this source actually represents the default options
+     * element
+     *
+     * @return True for the default options
+     */
+    public boolean isDefaultOptions() {
+        return getFileName().equals( SchemagenMojo.DEFAULT_OPTIONS_ELEM );
     }
 
     /***********************************/

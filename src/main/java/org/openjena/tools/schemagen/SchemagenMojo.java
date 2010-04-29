@@ -17,8 +17,9 @@ package org.openjena.tools.schemagen;
 ///////////////
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import jena.schemagen;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -46,6 +47,9 @@ public class SchemagenMojo
 
     /** Default pattern for includes */
 
+    /** Name of default options element */
+    public static final String DEFAULT_OPTIONS_ELEM = "default";
+
     /***********************************/
     /* Static variables                */
     /***********************************/
@@ -68,9 +72,9 @@ public class SchemagenMojo
 
     /**
      * Options for individual files
-     * @parameter alias="props"
+     * @parameter alias="fileOptions"
      */
-    private List<Source> props;
+    private List<Source> fileOptions;
 
     /**
      * The current base directory of the project
@@ -89,8 +93,15 @@ public class SchemagenMojo
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info( "includes = " + (includes == null ? null : includes[0]) );
 
-        for (Source p: props) {
+        for (Source p: fileOptions) {
             getLog().info( "source: fileName=" + p.getFileName() );
+
+            if (isDefaultOptions( p )) {
+                handleDefaultOptions( p );
+            }
+            else {
+                handleFile( p );
+            }
         }
     }
 
@@ -99,7 +110,7 @@ public class SchemagenMojo
      * determined by processing the Ant style paths given in the <code>includes</code>
      * and <code>excludes</code> parameters.
      *
-     * @return Non-null but possibly empty list of files to process
+     * @return Non-null but possibly empty list of files to process, sorted into lexical order
      */
     protected List<String> matchFileNames() {
         DirectoryScanner ds = new DirectoryScanner();
@@ -108,7 +119,26 @@ public class SchemagenMojo
         ds.setBasedir( getBaseDir() );
         ds.scan();
 
-        return Arrays.asList( ds.getIncludedFiles() );
+        String[] files = ds.getIncludedFiles();
+        Arrays.sort( files );
+        return Arrays.asList( files );
+    }
+
+
+    protected SchemagenOptions getDefaultOptions() {
+        return null;
+    }
+
+    protected boolean isDefaultOptions( Source s ) {
+        return false;
+    }
+
+    protected void handleDefaultOptions( Source defOptions ) {
+
+    }
+
+    protected void handleFile( Source file ) {
+
     }
 
 
@@ -135,6 +165,7 @@ public class SchemagenMojo
             incls[i++] = s;
         }
         incls[i] = incl;
+
         this.includes = incls;
     }
 
@@ -161,10 +192,5 @@ public class SchemagenMojo
     protected File getBaseDir() {
         return (baseDir == null) ? new File(".").getAbsoluteFile() : baseDir;
     }
-
-    /***********************************/
-    /* Inner class definitions         */
-    /***********************************/
-
 }
 
