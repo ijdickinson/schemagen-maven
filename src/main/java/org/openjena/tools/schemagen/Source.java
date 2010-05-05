@@ -66,6 +66,7 @@ public class Source
         return getFileName().equals( SchemagenMojo.DEFAULT_OPTIONS_ELEM );
     }
 
+
     /***********************************/
     /* Internal implementation methods */
     /***********************************/

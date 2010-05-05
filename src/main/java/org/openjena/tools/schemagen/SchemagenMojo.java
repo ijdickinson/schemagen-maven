@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.*;
 
 import jena.schemagen;
+import jena.schemagen.SchemagenOptions.OPT;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -54,6 +55,17 @@ public class SchemagenMojo
     /* Static variables                */
     /***********************************/
 
+    /**
+     * Build directory
+     * @parameter expression="${maven.build.dir}"
+     */
+    private static String buildDir;
+
+    /** Return the value of <code>${maven.build.dir}</code> */
+    public static String getBuildDir() {
+        return buildDir;
+    }
+
     /***********************************/
     /* Instance variables              */
     /***********************************/
@@ -82,6 +94,12 @@ public class SchemagenMojo
      */
     private File baseDir;
 
+    /** The default options object, if any */
+    private SchemagenOptions defaultOptions;
+
+    /** Map of source options, indexed by name */
+    private Map<String, SchemagenOptions> optIndex = new HashMap<String, SchemagenOptions>();
+
     /***********************************/
     /* Constructors                    */
     /***********************************/
@@ -91,17 +109,22 @@ public class SchemagenMojo
     /***********************************/
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        getLog().info( "includes = " + (includes == null ? null : includes[0]) );
+        // set the default defaults
+        defaultOptions = new SchemagenOptions.DefaultSchemagenOptions();
 
+        // next process the various options specs
         for (Source p: fileOptions) {
-            getLog().info( "source: fileName=" + p.getFileName() );
-
-            if (isDefaultOptions( p )) {
+            if (p.isDefaultOptions()) {
                 handleDefaultOptions( p );
             }
             else {
-                handleFile( p );
+                handleOption( p );
             }
+        }
+
+        // then the files themselves
+        for (String fileName: matchFileNames()) {
+            processFile( fileName );
         }
     }
 
@@ -125,20 +148,58 @@ public class SchemagenMojo
     }
 
 
+    /**
+     * Return the default options structure, or null
+     * @return
+     */
     protected SchemagenOptions getDefaultOptions() {
-        return null;
+        return defaultOptions;
     }
 
-    protected boolean isDefaultOptions( Source s ) {
-        return false;
+    /**
+     * Handle the default options by creating a default options object and assigning
+     * the options values from the given source object.
+     * @param defOptionsSource The source object containing the default options
+     */
+    protected void handleDefaultOptions( Source defOptionsSource ) {
+        if (defaultOptions != null) {
+            defOptionsSource.setParent( defaultOptions );
+        }
+        defaultOptions = defOptionsSource;
     }
 
-    protected void handleDefaultOptions( Source defOptions ) {
-
+    /**
+     * Process the given options specification for one of the input files
+     * by attaching the default options and indexing.
+     *
+     * @param file Specification of the options for a given file
+     */
+    protected void handleOption( Source optionSpec ) {
+        if (optionSpec.getFileName() != null) {
+            optionSpec.setParent( getDefaultOptions() );
+            optIndex.put( optionSpec.getFileName(), optionSpec );
+        }
+        else {
+            getLog().info( "ignoring <source> element because the fileName is not specified" );
+        }
     }
 
-    protected void handleFile( Source file ) {
+    /**
+     * Delegate the processing of the given file to schemagen itself
+     * @param fileName
+     */
+    protected void processFile( String fileName ) {
+        SchemagenOptions so = optIndex.get( fileName );
 
+        // if we have no options carrier for this file, we create one to contain
+        // the name of the input file, and link it to the defaults
+        if (so == null) {
+            so = new SchemagenOptions();
+            so.setOption( OPT.INPUT, fileName );
+            so.setParent( getDefaultOptions() );
+        }
+
+        new SchemagenAdapter().run( so );
     }
 
 
@@ -191,6 +252,21 @@ public class SchemagenMojo
      */
     protected File getBaseDir() {
         return (baseDir == null) ? new File(".").getAbsoluteFile() : baseDir;
+    }
+
+    /***********************************/
+    /* Inner classes                   */
+    /***********************************/
+
+    /**
+     * Adapter class to invoke the schemagen tool with a given set of options
+     */
+    protected class SchemagenAdapter
+        extends schemagen
+    {
+        public void run( SchemagenOptions options ) {
+            go( options );
+        }
     }
 }
 

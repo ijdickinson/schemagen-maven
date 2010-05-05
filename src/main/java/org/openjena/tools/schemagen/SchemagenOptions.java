@@ -220,4 +220,14 @@ public class SchemagenOptions
     /* Inner class definitions         */
     /***********************************/
 
+    /**
+     * Default options for schemagen if no other options are specified
+     */
+    public static class DefaultSchemagenOptions
+        extends SchemagenOptions
+    {
+        public DefaultSchemagenOptions() {
+            setOption( OPT.OUTPUT, SchemagenMojo.getBuildDir() + "/generated-sources" );
+        }
+    }
 }
