@@ -51,8 +51,8 @@ public class Source
         return getOption( OPT.INPUT );
     }
 
-    /** @parameter expr="fileName" */
-    public void setFileName( String fileName ) {
+    /** @parameter expr="input" */
+    public void setInput( String fileName ) {
         setOption( OPT.INPUT, fileName );
     }
 
