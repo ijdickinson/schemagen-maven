@@ -24,8 +24,7 @@ import jena.schemagen.OptionDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.*;
 
 
 /**
@@ -107,8 +106,23 @@ public class SchemagenOptions
      * to the parent.
      * @return The string value of the option, or null
      */
-    public String getOption( OPT option ) {
-        String v = getValue( option );
+    public String getStringOption( OPT option ) {
+        String v = getStringValue( option );
+        return (v != null) ? v : (parent != null ? parent.getStringOption( option ) : null);
+    }
+
+    /**
+     * Get the value of the given option, as an RDF node. If the option is not defined
+     * locally, return the value of the same option of the parent, if the parent
+     * is non-null. Otherwise, return <code>null</code>
+     * @param option The name of the option to retrieve
+     * @return The value of the option as an RDFNode, or null if the option is not defined. If
+     * the parent is non-null and the option is not defined, delegate the <code>getOption</code>
+     * to the parent.
+     * @return The RDFnode value of the option, or null
+     */
+    public RDFNode getOption( OPT option ) {
+        RDFNode v = getValue( option );
         return (v != null) ? v : (parent != null ? parent.getOption( option ) : null);
     }
 
@@ -182,9 +196,19 @@ public class SchemagenOptions
      * from the parent options object.
      */
     @Override
-    protected String getValue( OPT option ) {
-        String v = super.getValue( option );
+    protected RDFNode getValue( OPT option ) {
+        RDFNode v = super.getValue( option );
         return (v == null && hasParent()) ? getParent().getValue( option ) : v;
+    }
+
+    /**
+     * Return the value of the option or null, , either locally or
+     * from the parent options object.
+     */
+    @Override
+    protected String getStringValue( OPT option ) {
+        String v = super.getStringValue( option );
+        return (v == null && hasParent()) ? getParent().getStringValue( option ) : v;
     }
 
     /**

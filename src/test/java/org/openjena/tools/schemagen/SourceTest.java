@@ -104,7 +104,7 @@ public class SourceTest
     public void testGetOption() {
         Source s = new Source();
         setParamValue( s );
-        assertEquals( expected, s.getOption( option ) );
+        assertEquals( optionName, expected, s.getOption( option ).asLiteral().getValue() );
     }
 
 
@@ -121,49 +121,219 @@ public class SourceTest
                 break;
 
             case CLASS_SECTION:
-            case CLASSDEC:
-            case CLASSNAME:
-            case CLASSNAME_SUFFIX:
-            case CLASS_TEMPLATE:
-            case CONFIG_FILE:
-            case DECLARATIONS:
-            case ENCODING:
-            case FOOTER:
-            case HEADER:
-            case INCLUDE:
-            case INDIVIDUALS_SECTION:
-            case INDIVIDUAL_TEMPLATE:
-            case MARKER:
-            case NAMESPACE:
-            case OUTPUT:
-            case PACKAGENAME:
-            case PROPERTY_SECTION:
-            case PROP_TEMPLATE:
-            case ROOT:
+                s.setClassSection( optionName );
 
-                s.setOption( option, "fail" );
+                expected = optionName;
+                break;
+
+            case CLASSDEC:
+                s.setClassDec( optionName );
+
+                expected = optionName;
+                break;
+
+            case CLASSNAME:
+                s.setClassName( optionName );
+
+                expected = optionName;
+                break;
+
+            case CLASSNAME_SUFFIX:
+                s.setClassNameSuffix( optionName );
+
+                expected = optionName;
+                break;
+
+            case CLASS_TEMPLATE:
+                s.setClassTemplate( optionName );
+
+                expected = optionName;
+                break;
+
+            case CONFIG_FILE:
+                s.setConfigFile( optionName );
+
+                expected = optionName;
+                break;
+
+            case DECLARATIONS:
+                s.setDeclarations( optionName );
+
+                expected = optionName;
+                break;
+
+            case ENCODING:
+                s.setEncoding( optionName );
+
+                expected = optionName;
+                break;
+
+            case FOOTER:
+                s.setFooter( optionName );
+
+                expected = optionName;
+                break;
+
+            case HEADER:
+                s.setHeader( optionName );
+
+                expected = optionName;
+                break;
+
+            case INCLUDE:
+                s.setInclude( optionName );
+
+                expected = optionName;
+                break;
+
+            case INDIVIDUALS_SECTION:
+                s.setIndividualsSection( optionName );
+
+                expected = optionName;
+                break;
+
+            case INDIVIDUAL_TEMPLATE:
+                s.setIndividualTemplate( optionName );
+
+                expected = optionName;
+                break;
+
+            case MARKER:
+                s.setMarker( optionName );
+
+                expected = optionName;
+                break;
+
+            case NAMESPACE:
+                s.setNamespace( optionName );
+
+                expected = optionName;
+                break;
+
+            case OUTPUT:
+                s.setOutput( optionName );
+
+                expected = optionName;
+                break;
+
+            case PACKAGENAME:
+                s.setPackageName( optionName );
+
+                expected = optionName;
+                break;
+
+            case PROPERTY_SECTION:
+                s.setPropertySection( optionName );
+
+                expected = optionName;
+                break;
+
+            case PROP_TEMPLATE:
+                s.setPropTemplate( optionName );
+
+                expected = optionName;
+                break;
+
+            case ROOT:
+                s.setRoot( optionName );
+
                 expected = optionName;
                 break;
 
             // Boolean options
             case DOS:
-            case HELP:
-            case INCLUDE_SOURCE:
-            case LANG_DAML:
-            case LANG_OWL:
-            case LANG_RDFS:
-            case NOCLASSES:
-            case NOHEADER:
-            case NOINDIVIDUALS:
-            case NOPROPERTIES:
-            case NO_COMMENTS:
-            case NO_STRICT:
-            case ONTOLOGY:
-            case STRICT_INDIVIDUALS:
-            case UC_NAMES:
-            case USE_INF:
+                s.setDos( optionName );
 
-                s.setOption( option, false );
+                expected = true;
+                break;
+
+            case HELP:
+                s.setHelp( optionName );
+
+                expected = true;
+                break;
+
+            case INCLUDE_SOURCE:
+                s.setIncludeSource( optionName );
+
+                expected = true;
+                break;
+
+            case LANG_DAML:
+                s.setLangDaml( optionName );
+
+                expected = true;
+                break;
+
+            case LANG_OWL:
+                s.setLangOwl( optionName );
+
+                expected = true;
+                break;
+
+            case LANG_RDFS:
+                s.setLangRdfs( optionName );
+
+                expected = true;
+                break;
+
+            case NOCLASSES:
+                s.setNoClasses( optionName );
+
+                expected = true;
+                break;
+
+            case NOHEADER:
+                s.setNoHeader( optionName );
+
+                expected = true;
+                break;
+
+            case NOINDIVIDUALS:
+                s.setNoIndividuals( optionName );
+
+                expected = true;
+                break;
+
+            case NOPROPERTIES:
+                s.setNoProperties( optionName );
+
+                expected = true;
+                break;
+
+            case NO_COMMENTS:
+                s.setNoComments( optionName );
+
+                expected = true;
+                break;
+
+            case NO_STRICT:
+                s.setNoStrict( optionName );
+
+                expected = true;
+                break;
+
+            case ONTOLOGY:
+                s.setOntology( optionName );
+
+                expected = true;
+                break;
+
+            case STRICT_INDIVIDUALS:
+                s.setStrictIndividuals( optionName );
+
+                expected = true;
+                break;
+
+            case UC_NAMES:
+                s.setUcNames( optionName );
+
+                expected = true;
+                break;
+
+            case USE_INF:
+                s.setUseInf( optionName );
+
                 expected = true;
                 break;
 
