@@ -32,12 +32,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>TODO class comment</p>
+ * <p>This test checks basic coverage of the options from schemagen: if more options are added,
+ * without updating the option setters, this test should give a compile warning in @{@link #setParamValue(Source)}</p>
  *
  * @author Ian Dickinson, Epimorphics (mailto:ian@epimorphics.com)
  */
 @RunWith( Parameterized.class )
-public class SourceTest
+public class SourceParameterTest
 {
     /***********************************/
     /* Constants                       */
@@ -66,7 +67,7 @@ public class SourceTest
     /***********************************/
 
     @SuppressWarnings( value = "unused" )
-    private static final Logger log = LoggerFactory.getLogger( SourceTest.class );
+    private static final Logger log = LoggerFactory.getLogger( SourceParameterTest.class );
 
     /**
      * @throws java.lang.Exception
@@ -88,7 +89,7 @@ public class SourceTest
     /* Constructors                    */
     /***********************************/
 
-    public SourceTest( OPT paramVal, String paramName ) {
+    public SourceParameterTest( OPT paramVal, String paramName ) {
         option = paramVal;
         optionName = paramName;
     }
