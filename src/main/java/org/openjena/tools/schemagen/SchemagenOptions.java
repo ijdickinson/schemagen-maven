@@ -251,7 +251,7 @@ public class SchemagenOptions
         extends SchemagenOptions
     {
         public DefaultSchemagenOptions() {
-            setOption( OPT.OUTPUT, SchemagenMojo.getBuildDir() + "/generated-sources" );
+            setOption( OPT.OUTPUT, SchemagenMojo.getProjectBuildDir() + SchemagenMojo.GENERATED_SOURCES );
         }
     }
 }

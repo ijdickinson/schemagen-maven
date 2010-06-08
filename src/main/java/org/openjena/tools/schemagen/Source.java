@@ -13,6 +13,7 @@
 package org.openjena.tools.schemagen;
 
 
+
 // Imports
 ///////////////
 

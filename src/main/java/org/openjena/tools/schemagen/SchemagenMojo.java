@@ -27,6 +27,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.DirectoryScanner;
 
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+
 
 /**
  * <p>Maven plugin to execute Jena schemagen as part of a Jena-based
@@ -46,6 +49,9 @@ public class SchemagenMojo
     /* Constants                       */
     /***********************************/
 
+    /** Default output location */
+    public static final String GENERATED_SOURCES = File.separator + "generated-sources";
+
     /** Default pattern for includes */
 
     /** Name of default options element */
@@ -56,14 +62,14 @@ public class SchemagenMojo
     /***********************************/
 
     /**
-     * Build directory
-     * @parameter expression="${maven.build.dir}"
+     * Target directory
+     * @parameter expression="${project.build.directory}"
      */
-    private static String buildDir;
+    private static String projectBuildDir;
 
-    /** Return the value of <code>${maven.build.dir}</code> */
-    public static String getBuildDir() {
-        return buildDir;
+    /** Return the value of <code>${project.build.directory}</code> */
+    public static String getProjectBuildDir() {
+        return projectBuildDir;
     }
 
     /***********************************/
@@ -90,7 +96,7 @@ public class SchemagenMojo
 
     /**
      * The current base directory of the project
-     * @parameter default-value="${basedir}"
+     * @parameter expression="${basedir}"
      */
     private File baseDir;
 
@@ -111,6 +117,8 @@ public class SchemagenMojo
     public void execute() throws MojoExecutionException, MojoFailureException {
         // set the default defaults
         defaultOptions = new SchemagenOptions.DefaultSchemagenOptions();
+
+        getLog().info( "Starting schemagen execute() ...");
 
         // next process the various options specs
         for (Source p: fileOptions) {
@@ -188,17 +196,34 @@ public class SchemagenMojo
      * Delegate the processing of the given file to schemagen itself
      * @param fileName
      */
-    protected void processFile( String fileName ) {
+    protected void processFile( String fileName )
+        throws MojoExecutionException
+    {
+        getLog().info( "processFile with " + fileName );
         SchemagenOptions so = optIndex.get( fileName );
+        getLog().info( "so = " + so );
 
         // if we have no options carrier for this file, we create one to contain
         // the name of the input file, and link it to the defaults
         if (so == null) {
-            so = new SchemagenOptions();
-            so.setOption( OPT.INPUT, fileName );
+            getLog().info( "1: " );
+            so = new Source();
+            getLog().info( "2: " + so );
+
+            boolean relative = !(fileName.startsWith( "http:" ) || fileName.startsWith( "file:" ));
+            getLog().info( "baseDir = " + baseDir );
+            getLog().info( "getBaseDir() = " + getBaseDir() );
+            Resource input = ResourceFactory.createResource( relative ? "file:" + baseDir + File.separator + fileName : fileName );
+
+
+            so.setOption( OPT.INPUT, input );
+            getLog().info( "3: " + so.getOption( OPT.INPUT ) );
             so.setParent( getDefaultOptions() );
+            getLog().info( "4: " );
         }
 
+        getLog().info( "about to call run(): " );
+        ensureTargetDirectory( so );
         new SchemagenAdapter().run( so );
     }
 
@@ -253,6 +278,28 @@ public class SchemagenMojo
     protected File getBaseDir() {
         return (baseDir == null) ? new File(".").getAbsoluteFile() : baseDir;
     }
+
+    /**
+     * Ensure that the output directory exists
+     */
+    protected void ensureTargetDirectory( SchemagenOptions so )
+        throws MojoExecutionException
+    {
+        File gs = new File( so.getOutputOption() );
+
+        if (!gs.exists()) {
+            gs.mkdirs();
+        }
+        else if (!gs.isDirectory()) {
+            getLog().error( "The output location is not a directory: " + gs.getPath() );
+            throw new MojoExecutionException( "Already exists as file: " + gs.getPath() );
+        }
+        else if (!gs.canWrite()) {
+            getLog().error( "Output directory exists but is not writable: " + gs.getPath() );
+            throw new MojoExecutionException( "Not writable: " + gs.getPath() );
+        }
+    }
+
 
     /***********************************/
     /* Inner classes                   */

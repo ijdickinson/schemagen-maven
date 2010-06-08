@@ -120,7 +120,7 @@ public class SchemagenOptionsTest
     public void testGetOption2() {
         SchemagenOptions so0 = new SchemagenOptions();
         so0.setOption( OPT.CLASS_SECTION, "test123" );
-        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ));
+        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ).asLiteral().getString() );
     }
 
     @Test
@@ -129,7 +129,7 @@ public class SchemagenOptionsTest
         SchemagenOptions so1 = new SchemagenOptions();
         so0.setParent( so1 );
         so0.setOption( OPT.CLASS_SECTION, "test123" );
-        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ));
+        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ).asLiteral().getString() );
     }
 
     @Test
@@ -138,7 +138,7 @@ public class SchemagenOptionsTest
         SchemagenOptions so1 = new SchemagenOptions();
         so0.setParent( so1 );
         so1.setOption( OPT.CLASS_SECTION, "test123" );
-        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ));
+        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ).asLiteral().getString());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class SchemagenOptionsTest
         so0.setParent( so1 );
         so0.setOption( OPT.CLASS_SECTION, "test.child" );
         so1.setOption( OPT.CLASS_SECTION, "test.parent" );
-        assertEquals( "test.child", so0.getOption( OPT.CLASS_SECTION ));
+        assertEquals( "test.child", so0.getOption( OPT.CLASS_SECTION ).asLiteral().getString());
     }
 
     /**
@@ -158,7 +158,7 @@ public class SchemagenOptionsTest
     public void testSetOptionStringString() {
         SchemagenOptions so0 = new SchemagenOptions();
         so0.setOption( "CLASS_SECTION", "test123" );
-        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ));
+        assertEquals( "test123", so0.getOption( OPT.CLASS_SECTION ).asLiteral().getString() );
     }
 
     /**
@@ -224,7 +224,7 @@ public class SchemagenOptionsTest
     public void testGetValueOPT1() {
         SchemagenOptions so0 = new SchemagenOptions();
         so0.setOption( OPT.CLASS_SECTION, "foo" );
-        assertEquals( "foo", so0.getValue( OPT.CLASS_SECTION ));
+        assertEquals( "foo", so0.getValue( OPT.CLASS_SECTION ).asLiteral().getString() );
     }
 
     @Test
@@ -233,7 +233,7 @@ public class SchemagenOptionsTest
         SchemagenOptions so1 = new SchemagenOptions();
         so0.setParent( so1 );
         so1.setOption( OPT.CLASS_SECTION, "foo" );
-        assertEquals( "foo", so0.getValue( OPT.CLASS_SECTION ));
+        assertEquals( "foo", so0.getValue( OPT.CLASS_SECTION ).asLiteral().getString() );
     }
 
     @Test
@@ -243,7 +243,7 @@ public class SchemagenOptionsTest
         so0.setParent( so1 );
         so1.setOption( OPT.CLASS_SECTION, "foo" );
         so0.setOption( OPT.CLASS_SECTION, "bar" );
-        assertEquals( "bar", so0.getValue( OPT.CLASS_SECTION ));
+        assertEquals( "bar", so0.getValue( OPT.CLASS_SECTION ).asLiteral().getString() );
     }
 
     /**
