@@ -29,11 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>TODO class comment</p>
+ * <p>Integration tests for schemagen mojo: test that running the plugin produces
+ * the right results</p>
  *
  * @author Ian Dickinson, Epimorphics (mailto:ian@epimorphics.com)
  */
 public class SchemagenMojoIntegrationTest
+    extends SchemagenMojoIntegrationTestBase
 {
     /***********************************/
     /* Constants                       */
@@ -63,11 +65,15 @@ public class SchemagenMojoIntegrationTest
         //
     }
 
+    /**
+     * Basic integration test: ensure that the output appears in the generated-sources directory
+     * @throws Exception
+     */
     @Test
     public void schemagenIntegrationTest0()
         throws Exception
     {
-        // Create dummy Maven project in /src/test/resources/...
+        // Get dummy Maven project from /src/test/resources/...
         File testDir = ResourceExtractor.simpleExtractResources( getClass(), "/schemagen-integration-0" );
 
         Verifier verifier = new Verifier( testDir.getAbsolutePath() );
@@ -80,35 +86,61 @@ public class SchemagenMojoIntegrationTest
         verifier.setCliOptions( cliOptions );
 
         verifier.executeGoal( "generate-sources" );
-
-        /*
-         * This is the simplest way to check a build
-         * succeeded. It is also the simplest way to create
-         * an IT test: make the build pass when the test
-         * should pass, and make the build fail when the
-         * test should fail. There are other methods
-         * supported by the verifier. They can be seen here:
-         * http://maven.apache.org/shared/maven-verifier/apidocs/index.html
-         */
         verifier.verifyErrorFreeLog();
+
+        // no package specified, so output is just in generated-sources
+        String gSource = asAbsoluteFileName( verifier, "target/generated-sources/Test1.java" );
+
+        // note that ?s modifier makes . pattern match newlines
+        verifier.assertFileMatches( gSource, "(?s).*public static final Resource Cls.*" );
 
         /*
          * Reset the streams before executing the verifier
          * again.
          */
         verifier.resetStreams();
+    }
+
+    /**
+     * Integration test: ensure that the output appears in the right package
+     * @throws Exception
+     */
+    @Test
+    public void schemagenIntegrationTest1()
+        throws Exception
+    {
+        // Get dummy Maven project from /src/test/resources/...
+        File testDir = ResourceExtractor.simpleExtractResources( getClass(), "/schemagen-integration-1" );
+
+        Verifier verifier = new Verifier( testDir.getAbsolutePath() );
 
         /*
-         * The verifier also supports beanshell scripts for
-         * verification of more complex scenarios. There are
-         * plenty of examples in the core-it tests here:
-         * http://svn.apache.org/repos/asf/maven/core-integration-testing/trunk
+         * The Command Line Options (CLI) are passed to the
+         * verifier as a list.
          */
+        List<String> cliOptions = new ArrayList<String>();
+        verifier.setCliOptions( cliOptions );
+
+        verifier.executeGoal( "generate-sources" );
+        verifier.verifyErrorFreeLog();
+
+        // no package specified, so output is just in generated-sources
+        String gSource = asAbsoluteFileName( verifier, "target/generated-sources/org/example/test/Test1.java" );
+
+        // note that ?s modifier makes . pattern match newlines
+        verifier.assertFileMatches( gSource, "(?s).*package org.example.test.*public static final Resource Cls.*" );
+
+        /*
+         * Reset the streams before executing the verifier
+         * again.
+         */
+        verifier.resetStreams();
     }
 
     /***********************************/
     /* Internal implementation methods */
     /***********************************/
+
 
     /***********************************/
     /* Inner class definitions         */
