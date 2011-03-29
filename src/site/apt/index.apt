@@ -38,3 +38,81 @@ run as a Maven plugin.
     input file. However, the reserved file name <<<default>>> corresponds to default
     schemagen options that are applied to all of the vocabulary files specified by the
     combination of <<<includes>>> and <<<excludes>>> parameter values.
+
+* Example configurations
+
+    The following complete <<<pom.xml>>> configuration will process all <<<*.ttl>>> files
+    in <<<src/main/vocabs>>>, and put them all of the generated output
+    into the Java package <<<org.example.test>>>:
+
+--------------------------------
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>org.openjena.tools</groupId>
+          <artifactId>schemagen-example</artifactId>
+          <packaging>jar</packaging>
+          <version>0.0.1-SNAPSHOT</version>
+          <name>schemagen-example</name>
+          <url>http://maven.apache.org</url>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>org.openjena.tools</groupId>
+                <artifactId>schemagen</artifactId>
+                <version>0.1.0</version>
+                <configuration>
+                  <includes>
+                    <include>src/main/vocabs/*.ttl</include>
+                  </includes>
+                  <fileOptions>
+                    <source>
+                      <input>default</input>
+                      <package-name>org.example.test</package-name>
+                    </source>
+                  </fileOptions>
+                </configuration>
+                <executions>
+                  <execution>
+                    <id>schemagen</id>
+                    <goals>
+                      <goal>translate</goal>
+                    </goals>
+                  </execution>
+                </executions>
+              </plugin>
+            </plugins>
+          </build>
+          <dependencies>
+            <dependency>
+              <groupId>org.openjena.tools</groupId>
+              <artifactId>schemagen</artifactId>
+              <version>0.1.0</version>
+              <type>maven-plugin</type>
+              <scope>compile</scope>
+            </dependency>
+          </dependencies>
+        </project>
+--------------------------------
+
+     The following partial configuration shows how to pass additional schemagen configuration options,
+     and how to specify an option for one file that does not apply to the default selection:
+
+--------------------------------
+        <configuration>
+          <includes>
+            <include>src/main/vocabs/*.ttl</include>
+          </includes>
+          <fileOptions>
+            <source>
+              <input>default</input>
+              <package-name>org.example.test</package-name>
+            </source>
+            <source>
+              <!-- Test2.java (only) will contain OntModel declarations -->
+              <input>src/main/vocabs/test2.ttl</input>
+              <ontology>true</ontology>
+            </source>
+          </fileOptions>
+        </configuration>
+--------------------------------
