@@ -8,5 +8,7 @@
     <menu name="Jena Schemagen Plugin">
       <item name="Overview"  href="index.html" />
     </menu>
+
+     <menu ref="reports" />
   </body>
 </project>

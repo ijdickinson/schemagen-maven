@@ -4,9 +4,37 @@
   <groupId>org.openjena.tools</groupId>
   <artifactId>schemagen</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0</version>
   <name>Jena schemagen maven plugin</name>
   <description>A plugin for maven to generate Java files from RDF vocabulary sources using Jena's schemagen tool</description>
+  <url>http://www.openjena.org</url>
+  <issueManagement>
+    <system>Jira</system>
+    <url>https://issues.apache.org/jira/browse/JENA</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>ian</id>
+      <name>Ian Dickinson</name>
+      <email>ian@epimorphics.com</email>
+      <url>http://www.iandickinson.me.uk</url>
+      <organization>Epimorphics Ltd</organization>
+      <organizationUrl>http://www.epimorphics.com</organizationUrl>
+      <timezone>+0</timezone>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git@github.com:ephemerian/schemagen-maven.git</connection>
+    <url>https://github.com/ephemerian/schemagen-maven</url>
+  </scm>
   <organization>
     <name>Epimorphics Ltd</name>
     <url>http://www.epimorphics.com</url>
@@ -95,11 +123,27 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-    	<groupId>org.apache.maven.shared</groupId>
-    	<artifactId>maven-verifier</artifactId>
-    	<version>1.2</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-verifier</artifactId>
+      <version>1.2</version>
+      <type>jar</type>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>surefire-report-maven-plugin</artifactId>
+        <version>2.0-beta-1</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

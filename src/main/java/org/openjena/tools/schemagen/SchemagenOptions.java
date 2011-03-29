@@ -4,7 +4,7 @@
  * Created: 2 Apr 2010
  * By:      ian
  *
- * Copyright (c) 2010 Epimorphics Ltd. All rights reserved.
+ * Copyright (c) 2010-11 Epimorphics Ltd. See LICENSE file for license terms.
  *****************************************************************************/
 
 // Package
@@ -82,7 +82,7 @@ public class SchemagenOptions
 
     /**
      * Return the parent options object, or null
-     * @return
+     * @return The parent options object if defined
      */
     public SchemagenOptions getParent() {
         return parent;
@@ -90,7 +90,7 @@ public class SchemagenOptions
 
     /**
      * Return true if this options object has a parent
-     * @return
+     * @return True if parent is defined
      */
     public boolean hasParent() {
         return getParent() != null;

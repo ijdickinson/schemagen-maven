@@ -4,7 +4,7 @@
  * Created: 22 Mar 2010
  * By:      ian
  *
- * Copyright (c) 2010 Epimorphics Ltd. All rights reserved.
+ * Copyright (c) 2010-11 Epimorphics Ltd. See LICENSE file for license terms.
  *****************************************************************************/
 
 // Package

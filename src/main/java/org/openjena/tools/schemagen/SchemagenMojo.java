@@ -4,7 +4,7 @@
  * Created: 22 Mar 2010
  * By:      ian
  *
- * Copyright (c) 2010 Epimorphics Ltd. All rights reserved.
+ * Copyright (c) 2010-11 Epimorphics Ltd. See LICENSE file for license terms.
  *****************************************************************************/
 
 // Package
@@ -114,6 +114,7 @@ public class SchemagenMojo
     /* External signature methods      */
     /***********************************/
 
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         // set the default defaults
         defaultOptions = new SchemagenOptions.DefaultSchemagenOptions();
@@ -158,7 +159,7 @@ public class SchemagenMojo
 
     /**
      * Return the default options structure, or null
-     * @return
+     * @return The default options
      */
     protected SchemagenOptions getDefaultOptions() {
         return defaultOptions;
@@ -180,7 +181,7 @@ public class SchemagenMojo
      * Process the given options specification for one of the input files
      * by attaching the default options and indexing.
      *
-     * @param file Specification of the options for a given file
+     * @param optionSpec Specification of the options for a given file
      */
     protected void handleOption( Source optionSpec ) {
         if (optionSpec.getFileName() != null) {
