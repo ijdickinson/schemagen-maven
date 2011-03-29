@@ -12,7 +12,7 @@
       <plugin>
         <groupId>org.openjena.tools</groupId>
         <artifactId>schemagen</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0</version>
         <configuration>
           <includes>
             <include>src/main/vocabs/*.ttl</include>
@@ -38,7 +38,7 @@
     <dependency>
       <groupId>org.openjena.tools</groupId>
       <artifactId>schemagen</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.1.0</version>
       <type>maven-plugin</type>
       <scope>compile</scope>
     </dependency>
