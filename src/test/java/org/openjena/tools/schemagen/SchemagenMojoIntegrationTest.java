@@ -45,7 +45,6 @@ public class SchemagenMojoIntegrationTest
     /* Static variables                */
     /***********************************/
 
-    @SuppressWarnings( value = "unused" )
     private static final Logger log = LoggerFactory.getLogger( SchemagenMojoIntegrationTest.class );
 
     /***********************************/
@@ -134,6 +133,72 @@ public class SchemagenMojoIntegrationTest
          * Reset the streams before executing the verifier
          * again.
          */
+        verifier.resetStreams();
+    }
+
+    /**
+     * Integration test: ensure that the output appears in the right directory
+     * @throws Exception
+     */
+    @Test
+    public void schemagenIntegrationTest2()
+    throws Exception
+    {
+        // Get dummy Maven project from /src/test/resources/...
+        File testDir = ResourceExtractor.simpleExtractResources( getClass(), "/schemagen-integration-2" );
+
+        Verifier verifier = new Verifier( testDir.getAbsolutePath() );
+
+        List<String> cliOptions = new ArrayList<String>();
+        verifier.setCliOptions( cliOptions );
+
+        verifier.executeGoal( "generate-sources" );
+        verifier.verifyErrorFreeLog();
+
+        // output directory specified, so check the output is there
+        String gSource = asAbsoluteFileName( verifier, "src/main/java/org/example/test/Test1.java" );
+        verifier.assertFileMatches( gSource, "(?s).*package org.example.test.*public static final Resource Cls.*" );
+
+        try {
+            //new File( gSource ).delete();
+        }
+        catch (Exception ignore) {
+            log.debug( "Ignoring this exception: " + ignore.getMessage() );
+        }
+
+        /*
+         * Reset the streams before executing the verifier
+         * again.
+         */
+        verifier.resetStreams();
+    }
+
+    /**
+     * Integration test: option overriding for specific files
+     * @throws Exception
+     */
+    @Test
+    public void schemagenIntegrationTest3()
+    throws Exception
+    {
+        // Get dummy Maven project from /src/test/resources/...
+        File testDir = ResourceExtractor.simpleExtractResources( getClass(), "/schemagen-integration-3" );
+
+        Verifier verifier = new Verifier( testDir.getAbsolutePath() );
+
+        List<String> cliOptions = new ArrayList<String>();
+        verifier.setCliOptions( cliOptions );
+
+        verifier.executeGoal( "generate-sources" );
+        verifier.verifyErrorFreeLog();
+
+        // Test2.java should use the Ont API, Test1.java should not
+        String gSource = asAbsoluteFileName( verifier, "src/main/java/org/example/test/Test1.java" );
+        verifier.assertFileMatches( gSource, "(?s).*package org.example.test.*public static final Resource Cls.*" );
+
+        gSource = asAbsoluteFileName( verifier, "src/main/java/org/example/test/Test2.java" );
+        verifier.assertFileMatches( gSource, "(?s).*package org.example.test.*public static final OntClass Cls2.*" );
+
         verifier.resetStreams();
     }
 

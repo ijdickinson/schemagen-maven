@@ -7,6 +7,7 @@
   <body>
     <menu name="Jena Schemagen Plugin">
       <item name="Overview"  href="index.html" />
+      <item name="Configuration"  href="configuration.html" />
     </menu>
 
      <menu ref="reports" />
