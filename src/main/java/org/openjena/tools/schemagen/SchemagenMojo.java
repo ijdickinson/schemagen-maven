@@ -17,7 +17,9 @@ package org.openjena.tools.schemagen;
 ///////////////
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,15 +126,21 @@ public class SchemagenMojo
         getLog().info( "Starting schemagen execute() ...");
 
         // next process the various options specs
-        for (Source p: fileOptions) {
-            if (p.isDefaultOptions()) {
-                handleDefaultOptions( p );
-            }
-            else {
-                handleOption( p );
-            }
+        if( fileOptions != null ){
+	        for (Source p: fileOptions) {
+	            if (p.isDefaultOptions()) {
+	                handleDefaultOptions( p );
+	            }
+	            else {
+	                handleOption( p );
+	            }
+	        }
+    	}
+    
+        if( defaultOptions == null ){
+        	handleDefaultOptions( new Source() );        	
         }
-
+        
         // then the files themselves
         for (String fileName: matchFileNames()) {
             processFile( fileName );
@@ -153,9 +161,16 @@ public class SchemagenMojo
         ds.setBasedir( getBaseDir() );
         ds.scan();
 
-        String[] files = ds.getIncludedFiles();
-        Arrays.sort( files );
-        return Arrays.asList( files );
+		List<String> files = new ArrayList<String>( Arrays.asList( ds.getIncludedFiles() ) );
+        Collections.sort( files );
+        
+        //add http includes
+        for( String include : includes ){
+        	if( include.startsWith("http:") || include.startsWith("https:")){
+        		files.add( include );
+        	}
+        }
+        return files;
     }
 
 
@@ -225,7 +240,8 @@ public class SchemagenMojo
 
         getLog().info( "input before adjustment: " + soFileName );
         
-        boolean relative = !(soFileName.startsWith( "http:" ) || soFileName.startsWith( "file:" ));
+        boolean relative = !(soFileName.startsWith( "http:" ) || soFileName.startsWith( "https:" )
+        		|| soFileName.startsWith( "file:" ));
         getLog().info( "relative = " + relative );
         getLog().info( "baseDir = " + baseDir );
         getLog().info( "getBaseDir() = " + getBaseDir() );

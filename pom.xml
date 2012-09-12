@@ -41,6 +41,7 @@
   </organization>
   <properties>
     <jenaCoreVersion>2.7.3</jenaCoreVersion>
+    <version>${project.version}</version>
   </properties>
   <build>
       <plugins>
