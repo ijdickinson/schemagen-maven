@@ -17,7 +17,12 @@ package org.openjena.tools.schemagen;
 ///////////////
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import jena.schemagen;
 import jena.schemagen.SchemagenOptions.OPT;
@@ -63,7 +68,7 @@ public class SchemagenMojo
 
     /**
      * Target directory
-     * @parameter expression="${project.build.directory}"
+     * @parameter property="project.build.directory"
      */
     private static String projectBuildDir;
 
@@ -96,7 +101,7 @@ public class SchemagenMojo
 
     /**
      * The current base directory of the project
-     * @parameter expression="${basedir}"
+     * @parameter property="basedir"
      */
     private File baseDir;
 
@@ -114,7 +119,6 @@ public class SchemagenMojo
     /* External signature methods      */
     /***********************************/
 
-    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         // set the default defaults
         defaultOptions = new SchemagenOptions.DefaultSchemagenOptions();
@@ -122,15 +126,21 @@ public class SchemagenMojo
         getLog().info( "Starting schemagen execute() ...");
 
         // next process the various options specs
-        for (Source p: fileOptions) {
-            if (p.isDefaultOptions()) {
-                handleDefaultOptions( p );
-            }
-            else {
-                handleOption( p );
-            }
+        if( fileOptions != null ){
+	        for (Source p: fileOptions) {
+	            if (p.isDefaultOptions()) {
+	                handleDefaultOptions( p );
+	            }
+	            else {
+	                handleOption( p );
+	            }
+	        }
+    	}
+    
+        if( defaultOptions == null ){
+        	handleDefaultOptions( new Source() );        	
         }
-
+        
         // then the files themselves
         for (String fileName: matchFileNames()) {
             processFile( fileName );
@@ -151,9 +161,16 @@ public class SchemagenMojo
         ds.setBasedir( getBaseDir() );
         ds.scan();
 
-        String[] files = ds.getIncludedFiles();
-        Arrays.sort( files );
-        return Arrays.asList( files );
+		List<String> files = new ArrayList<String>( Arrays.asList( ds.getIncludedFiles() ) );
+        Collections.sort( files );
+        
+        //add http includes
+        for( String include : includes ){
+        	if( include.startsWith("http:") || include.startsWith("https:")){
+        		files.add( include );
+        	}
+        }
+        return files;
     }
 
 
@@ -200,28 +217,38 @@ public class SchemagenMojo
     protected void processFile( String fileName )
         throws MojoExecutionException
     {
+    	//fix windows paths
+    	if( File.separator.equals("\\") ){
+    		fileName = fileName.replaceAll( "\\\\", "/" );
+    	}
+    	
         getLog().info( "processFile with " + fileName );
+        getLog().info( optIndex.keySet().toString() );
         SchemagenOptions so = optIndex.get( fileName );
         getLog().info( "so = " + so );
 
         // if we have no options carrier for this file, we create one to contain
         // the name of the input file, and link it to the defaults
+        String soFileName;
         if (so == null) {
-            getLog().info( "1: " );
             so = new Source();
-            getLog().info( "2: " + so );
-
-            boolean relative = !(fileName.startsWith( "http:" ) || fileName.startsWith( "file:" ));
-            getLog().info( "baseDir = " + baseDir );
-            getLog().info( "getBaseDir() = " + getBaseDir() );
-            Resource input = ResourceFactory.createResource( relative ? "file:" + baseDir + File.separator + fileName : fileName );
-
-
-            so.setOption( OPT.INPUT, input );
-            getLog().info( "3: " + so.getOption( OPT.INPUT ) );
+            soFileName = fileName;
             so.setParent( getDefaultOptions() );
-            getLog().info( "4: " );
+        } else {
+        	soFileName = so.getOption( OPT.INPUT ).asLiteral().getString();
         }
+
+        getLog().info( "input before adjustment: " + soFileName );
+        
+        boolean relative = !(soFileName.startsWith( "http:" ) || soFileName.startsWith( "https:" )
+        		|| soFileName.startsWith( "file:" ));
+        getLog().info( "relative = " + relative );
+        getLog().info( "baseDir = " + baseDir );
+        getLog().info( "getBaseDir() = " + getBaseDir() );
+        soFileName = relative ? "file:" + baseDir + File.separator + soFileName : soFileName;
+        getLog().info( "input after adjustment: " + soFileName );
+        Resource input = ResourceFactory.createResource( soFileName );
+        so.setOption( OPT.INPUT, input );
 
         getLog().info( "about to call run(): " );
         ensureTargetDirectory( so );
