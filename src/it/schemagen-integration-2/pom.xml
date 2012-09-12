@@ -20,7 +20,7 @@
             <source>
               <input>default</input>
               <package-name>org.example.test</package-name>
-              <output>src/main/java</output>
+              <output>target/alt-source-dir</output>
             </source>
           </fileOptions>
         </configuration>
