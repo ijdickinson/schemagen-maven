@@ -60,7 +60,7 @@ run as a Maven plugin.
               <plugin>
                 <groupId>org.openjena.tools</groupId>
                 <artifactId>schemagen</artifactId>
-                <version>0.1.0</version>
+                <version>${version}</version>
                 <configuration>
                   <includes>
                     <include>src/main/vocabs/*.ttl</include>
@@ -87,7 +87,7 @@ run as a Maven plugin.
             <dependency>
               <groupId>org.openjena.tools</groupId>
               <artifactId>schemagen</artifactId>
-              <version>0.1.0</version>
+              <version>${version}</version>
               <type>maven-plugin</type>
               <scope>compile</scope>
             </dependency>

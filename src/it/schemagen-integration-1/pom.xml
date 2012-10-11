@@ -3,16 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openjena.tools</groupId>
   <artifactId>schemagen-test</artifactId>
+  <version>@project.version@</version>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
   <name>schemagen-test</name>
-  <url>http://maven.apache.org</url>
   <build>
     <plugins>
       <plugin>
         <groupId>org.openjena.tools</groupId>
         <artifactId>schemagen</artifactId>
-        <version>0.1.0</version>
+        <version>@project.version@</version>        
         <configuration>
           <includes>
             <include>src/main/vocabs/*.ttl</include>
@@ -37,11 +36,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.openjena.tools</groupId>
-      <artifactId>schemagen</artifactId>
-      <version>0.1.0</version>
-      <type>maven-plugin</type>
-      <scope>compile</scope>
+      <groupId>org.apache.jena</groupId>
+      <artifactId>jena-core</artifactId>
+      <version>@jenaCoreVersion@</version>
     </dependency>
-  </dependencies>
+  </dependencies>  
 </project>
