@@ -1,4 +1,4 @@
-= Schemagen-maven: generating Java source files from OWL and RDFS ontologies
+# Schemagen-maven: generating Java source files from OWL and RDFS ontologies
 
 The [Apache Jena](http://jena.apache.org) command line tool
 [`schemagen`](http://jena.apache.org/documentation/tools/schemagen.html)
@@ -14,7 +14,7 @@ For projects based around Apache maven, it would be convenient to integrate
 the schemagen translation step into maven's normal build process. This plugin
 provides a means to do just that.
 
-== Pre-requisites
+## Pre-requisites
 
 This plugin adds a step to the maven build process to automatically translate RDFS
 and OWL files, encoded as RDF/XML, Turtle or N-triples into Java source files.
@@ -24,7 +24,7 @@ not using Maven should see the [schemagen documentation](http://jena.apache.org/
 for ways to run `schemagen` from the command line.
 
 
-== Installing
+## Installing
 
 Schemagen is *not* currently available from the maven central repository (this will
 change one day). For the time being, it is necessary to check out the source code
@@ -47,7 +47,7 @@ check back through the output to see what has gone wrong. If you can't see what 
 gone wrong, post a question on github or ask me on IRC (ephemerian on freenode, if I'm
 online I'll be in `#jena`).
 
-== Configuration: basic principles
+## Configuration: basic principles
 
 Schemagen supports a large number of options, controlling such things as the name of the
 input file, the RDF namespace to expect, which Java package to place the output in and
@@ -86,7 +86,7 @@ maven to use the plugin via the `<build>/<plugins>` section:
 
 The configuration options all nest inside the `<configuration>` section.
 
-=== Specifying files to process
+### Specifying files to process
 
 An `<include>` directive specifies one file pattern to include in the set of
 files to process. Wildcards may be used. For example, the following section
@@ -98,7 +98,7 @@ in `src/main/vocabs`:
       <include>src/main/vocabs/foaf.rdf</include>
     </includes>
 
-=== Specifying processing options
+### Specifying processing options
 
 Options are, in general, given in the `<fileOptions>` section. A given
 `<source>` refers to one input source - one file - as named by the
@@ -122,7 +122,7 @@ across all input sources:
               <package-name>org.example.test</package-name>
             </source>
 
-== Example configuration
+## Example configuration
 
     <build>
       <plugins>
@@ -159,4 +159,7 @@ across all input sources:
       </plugins>
     </build>
 
-== Example run
+## Example run
+
+Todo
+
